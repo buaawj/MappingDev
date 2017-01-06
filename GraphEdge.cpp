@@ -9,82 +9,68 @@
 
 #include "GraphEdge.h"
 
-GraphEdge::GraphEdge() 
+GraphEdge::GraphEdge()
 {
 	id = -1;
 	srcTaskId = -1;
-	DstTaskId = -1;
+	dstTaskId = -1;
 	msgSize = -1;
 }
 
-GraphEdge::~GraphEdge() 
+GraphEdge::~GraphEdge()
 {
 }
 
-inline int	GraphEdge::GetId() 
+inline int	GraphEdge::GetId()
 {
 	return id;
 }
 
-inline int	GraphEdge::SetId(int eid) 
+inline int	GraphEdge::SetId(int eid)
 {
 	assert (eid >= 0);
 	id = eid;
 	return 0;
 }
 
-inline int	GraphEdge::GetSrcTaskId() 
+inline int	GraphEdge::GetSrcTaskId()
 {
 	return srcTaskId;
 }
 
-int	GraphEdge::SetSrcTaskId(int tid) 
+int	GraphEdge::SetSrcTaskId(int tid)
 {
 	assert (tid >= 0);
 	srcTaskId = tid;
 	return 0;
 }
 
-int	GraphEdge::get_dst_task_id() {
-	
-	return dst_task_id;
+int	GraphEdge::GetDstTaskId()
+{
+	return dstTaskId;
 }
 
-int	GraphEdge::set_dst_task_id(int tid) {
-	
+int	GraphEdge::SetDstTaskId(int tid)
+{
 	assert (tid >= 0);
-	dst_task_id = tid;
+	dstTaskId = tid;
 	return 0;
 }
 
-double GraphEdge::get_msg_size() {
-		
-	return msg_size;
+int GraphEdge::GetMsgSize()
+{
+	return msgSize;
 }
 
-int	GraphEdge::set_msg_size(double s) {
-
-	assert (s > 0);
-	msg_size = s;
+int	GraphEdge::SetMsgSize(int msg)
+{
+	assert (msg > 0);
+	msgSize = msg;
 	return 0;
 }
 
-int GraphEdge::print() {
-
-	cout << "    (" << get_id() << ", " << get_src_task_id() << ", " << get_dst_task_id() << ", " << get_msg_size() << ")" << endl;
+int GraphEdge::print()
+{
+	cout << "    (" << GetId() << ", " << GetSrcTaskId() << ", " << GetDstTaskId() << ", " << GetMsgSize() << ")" << endl;
 	return 0;
 }
-
-int	GraphEdge::get_buff_size() {
-		
-	return buff_size;
-}
-
-int	GraphEdge::set_buff_size(int s) {
-
-	assert (s > 0);
-	buff_size = s;
-	return 0;
-}
-
-

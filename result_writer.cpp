@@ -91,11 +91,11 @@ int ResultWriter::write_buffer_alloc_result_to_file(char *bufFileName) {
 		
 	// write the first line:
 	// number of edges
-	fprintf(fp, "%d\n", app_model->get_num_edge());
+	fprintf(fp, "%d\n", app_model->GetEdgeNum());
 
 	// write the next number of edges lines:
 	// edge id, buffer size
-	for (int i=0; i<app_model->get_num_edge(); i++) {
+	for (int i=0; i<app_model->GetEdgeNum(); i++) {
 		
 		// obtain edge info
 		GraphEdge &e = app_model->get_edge(i);
@@ -140,14 +140,14 @@ int ResultWriter::write_mapping_sched_result_to_file(char *mapFileName) {
 
 	// write the first line:
 	// number of PUs, number of tasks, number of edges
-	fprintf(fp, "%d\n%d\t%d\n", arc_model->get_num_proc(), app_model->get_num_task(), app_model->get_num_edge());
+	fprintf(fp, "%d\n%d\t%d\n", arc_model->get_num_proc(), app_model->GetTaskNum(), app_model->GetEdgeNum());
 
 	// write the next number of tasks lines:
 	// task id, mapped proc id, schedule sequence number
-	for (int i=0; i<app_model->get_num_task(); i++) {
+	for (int i=0; i<app_model->GetTaskNum(); i++) {
 	
 		// obtain task info
-		AppTask &t = app_model->get_task(i);
+		GraphTaskNode &t = app_model->get_task(i);
 		int task_id = i;
 		int mapping = t.get_mapping();
 		int sched = t.get_sched();

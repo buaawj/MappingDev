@@ -65,10 +65,10 @@ int AlgoBufferAlloc::run(AppModel &a, GlobalCfg &c) {
 	get_cost_root();
 
 	if (GENETIC_PRINT_OUT) {
-		cout << "Num tasks: " << app_model->get_num_task() << endl;
-		cout << "Num edges: " << app_model->get_num_edge() << endl << endl;
-		fprintf(output_file_pointer, "Num tasks: %d\n", app_model->get_num_task());
-		fprintf(output_file_pointer, "Num edges: %d\n\n", app_model->get_num_edge());
+		cout << "Num tasks: " << app_model->GetTaskNum() << endl;
+		cout << "Num edges: " << app_model->GetEdgeNum() << endl << endl;
+		fprintf(output_file_pointer, "Num tasks: %d\n", app_model->GetTaskNum());
+		fprintf(output_file_pointer, "Num edges: %d\n\n", app_model->GetEdgeNum());
 	}
 
 	// create a random seed
@@ -120,8 +120,8 @@ int AlgoBufferAlloc::assign_buffer_size_by_genetic_algorithm() {
 		update_best_individual();
 
 		// the minimum requirement (lower bound) is that each edge only has buffer size of one
-		if ( best_ind.fitness <= app_model->get_num_edge() )	{
-			assert (best_ind.fitness == app_model->get_num_edge());
+		if ( best_ind.fitness <= app_model->GetEdgeNum() )	{
+			assert (best_ind.fitness == app_model->GetEdgeNum());
 			break;
 		}
 		
@@ -158,7 +158,7 @@ int AlgoBufferAlloc::assign_buffer_size_by_genetic_algorithm() {
 
 int AlgoBufferAlloc::get_cost_root() {
 
-	while (cost_root < app_model->get_num_edge() * 10) {
+	while (cost_root < app_model->GetEdgeNum() * 10) {
 
 		cost_root = cost_root * 10;
 		assert (cost_root < MAX_VAL);
@@ -194,7 +194,7 @@ int AlgoBufferAlloc::get_random_individual(individual &d) {
 
 	d.elements.clear();
 	d.fitness = -1;
-	d.elements.resize(app_model->get_num_edge());
+	d.elements.resize(app_model->GetEdgeNum());
 	for (unsigned int i=0; i<d.elements.size(); i++) {
 		d.elements.at(i) = get_random_element();
 	}
@@ -247,7 +247,7 @@ int AlgoBufferAlloc::update_best_individual() {
 	best_ind.elements.clear();
 	best_ind.elements = pop_parents.at(0).elements;
 	best_ind.fitness  = pop_parents.at(0).fitness;
-	assert ((int)best_ind.elements.size() == app_model->get_num_edge());
+	assert ((int)best_ind.elements.size() == app_model->GetEdgeNum());
 	assert (best_ind.fitness > 0);
 	return 0;
 }
@@ -265,7 +265,7 @@ int AlgoBufferAlloc::init_population() {
 	// add a special individual which is a possible good solution
 	ind.elements.clear();
 	ind.fitness = -1;
-	ind.elements.resize(app_model->get_num_edge());
+	ind.elements.resize(app_model->GetEdgeNum());
 	for (unsigned long i=0; i<ind.elements.size(); i++) {
 		ind.elements.at(i) = 2;
 	}
@@ -304,21 +304,21 @@ int AlgoBufferAlloc::uniform_order_based_crossover(const int e1, const int e2) {
 	
 	individual &parent_ind1 = pop_offsprings.at(e1);
 	individual &parent_ind2 = pop_offsprings.at(e2);
-	assert ((int)parent_ind1.elements.size() == app_model->get_num_edge());
-	assert ((int)parent_ind2.elements.size() == app_model->get_num_edge());
+	assert ((int)parent_ind1.elements.size() == app_model->GetEdgeNum());
+	assert ((int)parent_ind2.elements.size() == app_model->GetEdgeNum());
 
 	individual offspring_ind1, offspring_ind2;
-	offspring_ind1.elements.resize(app_model->get_num_edge());
+	offspring_ind1.elements.resize(app_model->GetEdgeNum());
 	offspring_ind1.fitness = -1;
-	offspring_ind2.elements.resize(app_model->get_num_edge());
+	offspring_ind2.elements.resize(app_model->GetEdgeNum());
 	offspring_ind2.fitness = -1;
 
 	// generate a random bit_mask
 	vector<int> bit_mask;
-	bit_mask.resize(app_model->get_num_edge());
+	bit_mask.resize(app_model->GetEdgeNum());
 	get_random_bit_mask(bit_mask);
 
-	for (int i=0; i<app_model->get_num_edge(); i++) {
+	for (int i=0; i<app_model->GetEdgeNum(); i++) {
 		// switch the elements if the bit mask is 1
 		if ( 1 == bit_mask.at(i) ) {
 			offspring_ind1.elements.at(i) = parent_ind2.elements.at(i);
@@ -369,17 +369,17 @@ int AlgoBufferAlloc::genetic_crossover() {
 int AlgoBufferAlloc::ssl_mutation(const int e) {
 
 	individual &parent_ind = pop_offsprings.at(e);
-	assert ((int)parent_ind.elements.size() == app_model->get_num_edge());
+	assert ((int)parent_ind.elements.size() == app_model->GetEdgeNum());
 
 	individual offspring_ind;
-	offspring_ind.elements.resize(app_model->get_num_edge());
+	offspring_ind.elements.resize(app_model->GetEdgeNum());
 	offspring_ind.fitness = -1;
 	
-	int n1 = random(app_model->get_num_edge());
-	int n2 = random(app_model->get_num_edge());
+	int n1 = random(app_model->GetEdgeNum());
+	int n2 = random(app_model->GetEdgeNum());
 	int begin = (n1<=n2)?n1:n2;
 	int end   = (n1<=n2)?n2:n1;
-	for (int i=0; i<app_model->get_num_edge(); i++) {
+	for (int i=0; i<app_model->GetEdgeNum(); i++) {
 
 		// change the element to a random value if it is within the range [begin, end]
 		if ( i>=begin && i<=end ) {
@@ -421,7 +421,7 @@ int AlgoBufferAlloc::genetic_mutation() {
 long AlgoBufferAlloc::get_fitness_value(const int e) {
 
 	individual &ind = pop_offsprings.at(e);
-	assert ((int)ind.elements.size() == app_model->get_num_edge());
+	assert ((int)ind.elements.size() == app_model->GetEdgeNum());
 	if (ind.fitness == -1) {
 	
 	//	cout << "start hsdf" << endl;
@@ -488,8 +488,8 @@ int AlgoBufferAlloc::genetic_selection() {
 // function to calculate throughput of a hsdf graph
 double AlgoBufferAlloc::get_hsdf_thru(vector<int> &sz) {
 
-	const int ACTOR = app_model->get_num_task();
-	const int BUFF = app_model->get_num_edge();
+	const int ACTOR = app_model->GetTaskNum();
+	const int BUFF = app_model->GetEdgeNum();
 	assert (sz.size() == BUFF);
 	double progressTime = 0;
 	int thru, fire;
@@ -534,7 +534,7 @@ double AlgoBufferAlloc::get_hsdf_thru(vector<int> &sz) {
 		// check if free actors can fire: 0 -> 1
 		for (int i=0; i<ACTOR; i++) {
 			bool can_fire = true;
-			AppTask &t = app_model->get_task(i);
+			GraphTaskNode &t = app_model->get_task(i);
 			for (int j=0; j<t.get_num_incoming_edge(); j++) {
 				int in_edge_id = t.get_incoming_edge_id(j);
 				if (ch[in_edge_id] == 0) {
@@ -584,7 +584,7 @@ double AlgoBufferAlloc::get_hsdf_thru(vector<int> &sz) {
 		for (int i=0; i<ACTOR; i++) {
 			if (as[i]==2 && end[i]==time) {
 				as[i] = 3;
-				AppTask &t = app_model->get_task(i);
+				GraphTaskNode &t = app_model->get_task(i);
 				for (int j=0; j<t.get_num_incoming_edge(); j++) {
 					int in_edge_id = t.get_incoming_edge_id(j);
 					ch[in_edge_id] --;

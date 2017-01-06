@@ -193,15 +193,15 @@ int AlgoMappingSched::get_distance(int p1, int p2) {
     return dist;
 }
 
-int AlgoMappingSched::get_allocated_proc(int task_id) {
-
+int AlgoMappingSched::get_allocated_proc(int task_id) 
+{
     // load balancing
     assert (glb_cfg->get_mapping_algo() == 0);
     assert (mapping.at(task_id) == -1);
 	
     int allocated_proc_id = -1;
     int min_weight = MAX_VAL;
-    AppTask &t = app_model->get_task(task_id);
+    GraphTaskNode &t = app_model->get_task(task_id);
 
     int num_proc = arc_model->get_num_proc();
     int flit_size = arc_model->get_flit_size();
@@ -265,11 +265,11 @@ int AlgoMappingSched::get_allocated_proc(int task_id) {
 int AlgoMappingSched::finish_task_execution() {
 
     int num_finished_tasks = 0;
-    int num_edge = app_model->get_num_edge();
+    int num_edge = app_model->GetEdgeNum();
 	
     for (unsigned int i=0; i<task_start_time.size(); i++) {
 		
-	AppTask &t = app_model->get_task(i);
+	GraphTaskNode &t = app_model->get_task(i);
 	int exec_time = t.get_exec_time();
 	int start_time = task_start_time.at(i);
 	int &finish_time = task_finish_time.at(i);
@@ -315,7 +315,7 @@ int AlgoMappingSched::update_ready_queue() {
 	if (task_start_time.at(i) == -1) {
 		
 	    // check if all incoming edges are enabled
-	    AppTask &t = app_model->get_task(i);
+	    GraphTaskNode &t = app_model->get_task(i);
 	    bool t_ready = true;
 	    for (int j=0; j<t.get_num_incoming_edge(); j++) {
 		int eid = t.get_incoming_edge_id(j);
@@ -339,14 +339,14 @@ int AlgoMappingSched::save_result_to_app_model() {
 	
     // record mapping result
     for (unsigned int i=0; i<mapping.size(); i++) {
-	AppTask &t = app_model->get_task(i);
+	GraphTaskNode &t = app_model->get_task(i);
 	t.set_mapping( mapping.at(i) );
     }
 	
     // record scheduling result
     for (unsigned int i=0; i<sched.size(); i++) {
 	for (unsigned int j=0; j<sched.at(i).size(); j++) {
-	    AppTask &t = app_model->get_task( sched.at(i).at(j) );
+	    GraphTaskNode &t = app_model->get_task( sched.at(i).at(j) );
 	    t.set_sched(j);
 	}
     }
@@ -363,8 +363,8 @@ int AlgoMappingSched::run(AppModel &a, ArcModel &b, GlobalCfg &c) {
     arc_model = &b;
     glb_cfg = &c;
 	
-    int num_task = app_model->get_num_task();
-    int num_edge = app_model->get_num_edge();
+    int num_task = app_model->GetTaskNum();
+    int num_edge = app_model->GetEdgeNum();
     int num_proc = arc_model->get_num_proc();
 	
     ready_queue.clear();
@@ -394,7 +394,7 @@ int AlgoMappingSched::run(AppModel &a, ArcModel &b, GlobalCfg &c) {
 	    // get the first task in the ready queue
 	    int task_id = ready_queue.at(i);
 	    assert (task_id >= 0 && task_id < num_task);
-	    AppTask &t = app_model->get_task(task_id);
+	    GraphTaskNode &t = app_model->get_task(task_id);
 			
 	    // map and schedule the task
 	    int proc_id = get_allocated_proc(task_id);

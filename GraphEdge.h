@@ -1,14 +1,14 @@
 /***************************************************************************************************
- * File Name:             GraphEdge.h 
- *                        
+ * File Name:             GraphEdge.h
+ *
  * Application Developer: University of California Irvine
- *                                          
- * The copyright information of this software can be found in the file COPYRIGHT. 
+ *
+ * The copyright information of this software can be found in the file COPYRIGHT.
  *
  **************************************************************************************************/
 
 #ifndef GRAPH_EDGE
-#define COSMIC_APP_EDGE
+#define GRAPH_EDGE
 
 #include "global_cfg.h"
 
@@ -24,20 +24,18 @@ public:
 	int					SetSrcTaskId(int tid);
 	int					GetDstTaskId();
 	int					SetDstTaskId(int tid);
-	double				GetMsgSize();
+	int				    GetMsgSize();
 	int					SetMsgSize(int vol);
 	int					print();
-	
+
 private:
 
-	// basic parameters
 	int                 id;                         // the id of the edge
 	int                 srcTaskId;                  // the id of the source task
-	int                 DstTaskId;                  // the id of the destination task
-	double				msgSize;					// the worst-case message size
-	
+	int                 dstTaskId;                  // the id of the destination task
+	int				    msgSize;				    // the worst-case message size
+
 };
 
 
 #endif // GRAPH_EDGE
-

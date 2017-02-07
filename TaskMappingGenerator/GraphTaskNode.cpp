@@ -1,5 +1,5 @@
 /***************************************************************************************************
-* File Name:             GraphTaskNode.h
+* File Name:             GraphTaskNode.cpp
 *
 * Application Developer: University of California Irvine
 *
@@ -8,27 +8,15 @@
 **************************************************************************************************/
 
 #include "GraphTaskNode.h"
+#include <iostream>
+using namespace std;
 
-GraphTaskNode::GraphTaskNode(int taskId = -1) 
-{
-	id = taskId;
-	taskExecTime = -1;
-	incomingEdgeList.clear();
-	outgoingEdgeList.clear();
-	mapping = -1;
-	sched = -1;
-}
-
-GraphTaskNode::~GraphTaskNode() 
-{
-}
-
-int GraphTaskNode::GetTaskId() 
+int GraphTaskNode::GetTaskId()
 {
 	return id;
 }
 
-int GraphTaskNode::SetTaskId(int tid) 
+int GraphTaskNode::SetTaskId(int tid)
 {
 	assert(tid >= 0);
 	id = tid;
@@ -47,13 +35,13 @@ int GraphTaskNode::SetTaskExectTime(int execTime) {
 	return 0;
 }
 
-int GraphTaskNode::AddIncomingEdge(GraphEdge *edge) 
+int GraphTaskNode::AddIncomingEdge(GraphEdge *edge)
 {
 	incomingEdgeList.push_back(edge);
 	return 0;
 }
 
-int GraphTaskNode::AddOutgoingEdge(GraphEdge *edge) 
+int GraphTaskNode::AddOutgoingEdge(GraphEdge *edge)
 {
 	outgoingEdgeList.push_back(edge);
 	return 0;
@@ -112,32 +100,32 @@ int GraphTaskNode::set_sched(int s) {
 	return 0;
 }
 
-int GraphTaskNode::GetIncomingEdgeNum() 
+int GraphTaskNode::GetIncomingEdgeNum()
 {
 	return incomingEdgeList.size();
 }
 
-int GraphTaskNode::GetOutgoingEdgeNum() 
+int GraphTaskNode::GetOutgoingEdgeNum()
 {
 	return outgoingEdgeList.size();
 }
 
-GraphEdge* GraphTaskNode::GetIncomingEdge(int index) 
+GraphEdge* GraphTaskNode::GetIncomingEdge(int index)
 {
 	return incomingEdgeList[index];
 }
 
-GraphEdge* GraphTaskNode::GetOutgoingEdge(int index) 
+GraphEdge* GraphTaskNode::GetOutgoingEdge(int index)
 {
 	return outgoingEdgeList[index];
 }
 
-int GraphTaskNode::GetIncomingEdgeId(int index) 
+int GraphTaskNode::GetIncomingEdgeId(int index)
 {
 	return incomingEdgeList.at(index)->GetId();
 }
 
-int GraphTaskNode::GetOutgoingEdgeId(int index) 
+int GraphTaskNode::GetOutgoingEdgeId(int index)
 {
 	return outgoingEdgeList.at(index)->GetId();
 }

@@ -10,8 +10,6 @@
 #ifndef GRAPH_EDGE
 #define GRAPH_EDGE
 
-#include "global_cfg.h"
-
 class GraphEdge {
 
 public:

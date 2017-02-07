@@ -11,12 +11,26 @@
 #define GRAPH_TASK_NODE
 
 #include "GraphEdge.h"
-
+#include <cassert>
+#include <vector>
+using namespace std;
 class GraphTaskNode
 {
 public:
-	GraphTaskNode();
-	~GraphTaskNode();
+	GraphTaskNode::GraphTaskNode(int taskId = -1)
+	{
+		id = taskId;
+		taskExecTime = -1;
+		incomingEdgeList.clear();
+		outgoingEdgeList.clear();
+		mapping = -1;
+		sched = -1;
+	}
+
+	GraphTaskNode::~GraphTaskNode()
+	{
+
+	}
 
 	int					GetTaskId();
 	int					SetTaskId(int tid);
@@ -42,14 +56,14 @@ public:
 
 private:
 
-	int                 id;                         
-	int					taskExecTime;			    
-	vector<GraphEdge*>	incomingEdgeList;           
-	vector<GraphEdge*>	outgoingEdgeList;     
+	int                 id;
+	int					taskExecTime;
+	vector<GraphEdge*>	incomingEdgeList;
+	vector<GraphEdge*>	outgoingEdgeList;
 
 	int                 mapping;                    // the id of the PU the task is assigned
 	int                 sched;                   	// the sequence number the task is assigned to execute on the PU
 };
 
 
-#endif // GRAPH_NODE
+#endif // GRAPH_TASK_NODE

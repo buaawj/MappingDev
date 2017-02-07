@@ -12,7 +12,10 @@
 
 #include "GraphEdge.h"
 #include "GraphTaskNode.h"
+#include <map>
+#include<vector>
 
+using namespace std;
 class AppModel
 {
 
@@ -29,15 +32,15 @@ public:
 	int					load(const char file[], int acc_factor);	// load the application model from file
 	int					verify_consistency();			// verify each task/edge id is equal to its index in the list
 	int					print();
-	int 				BuildAppModel(map<pair<int, int>, int> &edges);
+	int 				BuildAppModel(map<pair<int, int>, int> &edges, int numTasks);
 
 	// basic functions
 	char*				get_app_name();
 	int					set_app_name(char s[]);
 	int					GetTaskNum();
 	int					GetEdgeNum();
-	int					GetDistance(int pe1, int pe2);
-
+	vector<GraphEdge>&  GetEdgeList();
+	vector<GraphTaskNode>& GetTaskList();
 
 private:
 	char				     appName[20];					// the name of the application

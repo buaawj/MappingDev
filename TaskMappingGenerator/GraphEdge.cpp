@@ -8,6 +8,9 @@
 **************************************************************************************************/
 
 #include "GraphEdge.h"
+#include <cassert>
+#include <iostream>
+using namespace std;
 
 GraphEdge::GraphEdge()
 {
@@ -21,19 +24,19 @@ GraphEdge::~GraphEdge()
 {
 }
 
-inline int	GraphEdge::GetId()
+int	GraphEdge::GetId()
 {
 	return id;
 }
 
-inline int	GraphEdge::SetId(int eid)
+int	GraphEdge::SetId(int eid)
 {
 	assert (eid >= 0);
 	id = eid;
 	return 0;
 }
 
-inline int	GraphEdge::GetSrcTaskId()
+int	GraphEdge::GetSrcTaskId()
 {
 	return srcTaskId;
 }

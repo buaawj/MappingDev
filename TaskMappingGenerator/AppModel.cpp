@@ -8,9 +8,9 @@
 **************************************************************************************************/
 
 #include "appModel.h"
+#include <iostream>
 
-extern string end_str;
-extern char temp_str[];
+#define GLOBAL_DEBUG_OUT true
 
 AppModel::AppModel()
 {
@@ -26,30 +26,24 @@ AppModel::~AppModel()
 {
 }
 
-
-void AppModel::PrintMappingResult() 
+void AppModel::PrintMappingResult()
 {
 	cout << "*** The mapping and scheduling result in (task id, mapped proc id is:" << endl;
-	for (unsigned int i = 0; i < taskList.size(); i++) 
+	for (unsigned int i = 0; i < taskList.size(); i++)
 	{
 		GraphTaskNode &t = taskList.at(i);
 		cout << "    (" << t.GetTaskId() << ", " << t.get_mapping() << ", " << ")" << endl;
 	}
 	cout << endl;
-
-	return 0;
 }
 
-int	AppModel::load_buffer_alloc_result(char *file) {
 
-}
-
-GraphTaskNode& AppModel::GetTask(int tid) 
+GraphTaskNode& AppModel::GetTask(int tid)
 {
 	return taskList.at(tid);
 }
 
-GraphEdge& AppModel::GetEdge(int eid) 
+GraphEdge& AppModel::GetEdge(int eid)
 {
 	return edgeList.at(eid);
 }
@@ -57,19 +51,20 @@ GraphEdge& AppModel::GetEdge(int eid)
 int AppModel::BuildAppModel(map<pair<int, int>, int> &edges, int numTasks)
 {
 	// initialize the lists
-	taskList.resize(numTasks+1);
-	for(int i=0; i<=numTasks; ++i)
+	taskList.resize(numTasks + 1);
+	for (int i = 1; i <= numTasks; ++i)
 	{
-		taskList[i] = GraphTaskNode(i);
+		GraphTaskNode taskNode(i);
+		taskList[i] = taskNode;
 	}
 	edgeList.resize(edges.size());
 
 	int edgeId = 0;
-	for(map<pair<int, int>, int>::iterator it = edges.begin(); it<edge.end(); ++it)
+	for (map<pair<int, int>, int>::iterator it = edges.begin(); it != edges.end(); ++it)
 	{
-		srcTaskId = it->first.first;
-		destTaskId = it->first.second;
-		commVol = it->second;
+		int srcTaskId = it->first.first;
+		int destTaskId = it->first.second;
+		int commVol = it->second;
 
 		// construct the edge
 		GraphEdge edge;
@@ -91,22 +86,17 @@ int AppModel::BuildAppModel(map<pair<int, int>, int> &edges, int numTasks)
 	// verify if the task list is consistent: task/edge id equal to its entry index
 	verify_consistency();
 
-	if (GLOBAL_DEBUG_OUT) 
+	if (GLOBAL_DEBUG_OUT)
 	{
 		print();
 	}
+
+	return 0;
 }
-
-
-int AppModel::GetDistance(int pe1, int pe2)
-{
-	
-}
-
 
 int AppModel::verify_consistency() {
 
-	for (unsigned int i = 0; i < taskList.size(); i++) {
+	for (unsigned int i = 1; i < taskList.size(); i++) {
 		GraphTaskNode &t = taskList.at(i);
 		if (i != t.GetTaskId()) {
 			std::cout << "Exppected id=" << i << " Receveid=" << t.GetTaskId() << endl;
@@ -125,11 +115,11 @@ int AppModel::verify_consistency() {
 
 int AppModel::print() {
 
-	cout << "*** Printing the application model \"" << appName << "\" with " << taskList.size()
+	cout << "*** Printing the application model \"" << appName << "\" with " << taskList.size()-1
 		<< " tasks and " << edgeList.size() << " edges..." << endl;
 
 	cout << "  task in (id, exec_time):" << endl;
-	for (unsigned int i = 0; i < taskList.size(); i++) {
+	for (unsigned int i = 1; i < taskList.size(); i++) {
 		GraphTaskNode &t = taskList.at(i);
 		t.print();
 	}
@@ -152,13 +142,13 @@ char* AppModel::get_app_name() {
 int AppModel::set_app_name(char s[]) {
 
 	assert(s[0] != '\0');
-	strcpy(appName, s);
+	strcpy_s(appName, s);
 	return 0;
 }
 
 int	AppModel::GetTaskNum() {
 
-	return taskList.size();
+	return taskList.size()-1;
 }
 
 int	AppModel::GetEdgeNum() {
@@ -166,4 +156,13 @@ int	AppModel::GetEdgeNum() {
 	return edgeList.size();
 }
 
+vector<GraphEdge>& AppModel::GetEdgeList()
+{
+	return edgeList;
+}
+
+vector<GraphTaskNode>& AppModel::GetTaskList()
+{
+	return taskList;
+}
 

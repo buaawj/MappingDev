@@ -10,6 +10,7 @@
 #include "AppModel.h"
 #include "NoCModel.h"
 #include "NoCTaskMapping.h"
+#include "PageRank.h"
 #include <iostream>
 #include <time.h>
 using namespace std;
@@ -20,18 +21,32 @@ const char version[] = " v1.0";
 const int  NUM_OF_PES = 9;
 const int  NUM_OF_ROW = 3;
 const int  NUM_OF_COL = 3;
-const int  NUM_OF_TASKS = 5;
+const int  NUM_OF_TASKS = 6;
 int main(int argc, char *argv[]) 
 {
     char *outMapFileName = "output.txt";
 
     map<pair<int, int>, int> edges;
-    edges[make_pair(1, 2)] = 25;
-    edges[make_pair(1, 3)] = 10;
-    edges[make_pair(1, 4)] = 15;
-    edges[make_pair(2, 5)] = 15;
-	edges[make_pair(3, 5)] = 10;
-	edges[make_pair(4, 5)] = 15;
+ //   edges[make_pair(1, 2)] = 25;
+ //   edges[make_pair(1, 3)] = 10;
+ //   edges[make_pair(1, 4)] = 15;
+ //   edges[make_pair(2, 5)] = 15;
+	//edges[make_pair(3, 5)] = 10;
+	//edges[make_pair(4, 5)] = 15;
+
+	//edges[make_pair(1, 2)] = 1;
+	//edges[make_pair(1, 3)] = 2;
+
+	edges[make_pair(1, 2)] = 1;
+	edges[make_pair(1, 3)] = 1;
+	edges[make_pair(3, 1)] = 1;
+	edges[make_pair(3, 2)] = 1;
+	edges[make_pair(3, 5)] = 1;
+	edges[make_pair(4, 5)] = 1;
+	edges[make_pair(5, 4)] = 1;
+	edges[make_pair(4, 6)] = 1;
+	edges[make_pair(6, 4)] = 1;
+	edges[make_pair(5, 6)] = 1;
 
 	// Use a different seed value so that we don't get
 	// same result each time we run this program
@@ -52,9 +67,9 @@ int main(int argc, char *argv[])
     	
     ////////////////////////////////////////////////////////////////////
     // 2. Generate mapping and write it to file
-	NoCTaskMapping taskMapping(600, outMapFileName, &app, &noc);
+	//NoCTaskMapping taskMapping(100000, outMapFileName, &app, &noc);
 
-	taskMapping.GeneratRandomMapping();
+	//taskMapping.GeneratRandomMapping();
 	//int optimal = INT_MAX;
 	//int count = 0;
 	//vector<bool> used(9, false);
@@ -63,6 +78,17 @@ int main(int argc, char *argv[])
 	//// Total is 15120
 	//taskMapping.BruteForceMapping(5, 9, path, used, optimal, count);
 	//cout << "Communication cost " << optimal;
+
+	////////////////////////////////////////////////////////////////////
+	// 3. Page Ranking
+	PageRank pageRanker(&app);
+	pageRanker.BuildTransitionMatrix();
+
+	vector<double> pr = pageRanker.PageRankAlgo();
+	for (int i=0; i<pr.size(); ++i)
+	{
+		cout << pr[i] << endl;
+	}
     return 0;
 }									   
 

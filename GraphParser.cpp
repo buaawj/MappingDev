@@ -84,15 +84,13 @@ bool GraphParser::Parse(const char *fname)
 			}
 		} // End while
 
-		TM_ASSERT(infile.eof(), "The task mapping file was not read entirely!");
-
 		BuildTaskGraphMapping(appId, startCycle, endCycle);
 
 		return true;
 	}
 	else
 	{
-		TM_ASSERT(infile.is_open(), "Error opening graph file.");
+		cout<<"Error opening graph file.";
 		return false;
 	}
 
@@ -127,7 +125,7 @@ void GraphParser::ParseTaskBlock(int appId, string line)
 		tokens.push_back(buf);
 	}
 
-	TM_ASSERT(tokens.size() == 4, "Error parsing Task block.");
+	assert(tokens.size() == 4);
 	taskId = ExtractValue(tokens[1]);
 	taskType = atoi(tokens[tokens.size() - 1].c_str());
 	// DEBUG
